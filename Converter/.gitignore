@@ -1,0 +1,19 @@
+# Xcode-specific files
+.DS_Store
+build/
+DerivedData/
+*.xcworkspace/
+*.xcuserstate
+*.xcuserdatad
+*.xccheckout
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.swiftpm
+*.swp
+*.lock
+
+# Swift Package Manager
+Packages/
+Package.pins
