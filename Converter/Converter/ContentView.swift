@@ -45,6 +45,39 @@ struct ContentView: View {
     @State private var lengthInput = 0.0
     @State private var lengthOutputType = "Kilometers"
     
+    // Lenght Functions
+    // Convert to base foots
+    var convertToFoot: Double {
+        switch lengthInputType {
+        case "Meters":
+            return lengthInput * 3.281
+        case "Kilometers":
+            return lengthInput * 3281.0
+        case "Yard":
+            return lengthInput * 3.0
+        case "Miles":
+            return lengthInput * 5280.0
+        default:
+            return lengthInput
+        }
+    }
+    
+    // Convert to output
+    var lengthOutput: Double {
+        switch lengthOutputType {
+        case "Meters":
+            return convertToFoot / 3.281
+        case "Kilometers":
+            return convertToFoot / 3281.0
+        case "Yard":
+            return convertToFoot / 3.0
+        case "Miles":
+            return convertToFoot / 5280.0
+        default:
+            return convertToFoot
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -96,7 +129,50 @@ struct ContentView: View {
                 }
                 
                 Section(header: Text("Length Converter")) {
+                    // Input Length Type
+                    Picker("Input Length", selection: $lengthInputType){
+                        ForEach(lengths, id: \.self){
+                            Text($0)
+                        }
+                    }
+                    .pickerStyle(.segmented)
                     
+                    // Input Length
+                    HStack {
+                        TextField("Enter lengths", value: $lengthInput, format: .number)
+                            .keyboardType(.decimalPad)
+                        Text(lengthInputType) // Display unit next to input
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    // Swap type
+                    Button(action: {
+                        let temp = lengthInputType
+                        lengthInputType = lengthOutputType
+                        lengthOutputType = temp
+                    }) {
+                        HStack{
+                            Spacer()
+                            Image(systemName: "arrow.right.arrow.left")
+                            Spacer()
+                        }
+                    }
+                    
+                    // Output Length Type
+                    Picker("Output Length", selection: $lengthOutputType){
+                        ForEach(lengths, id: \.self){
+                            Text($0)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    
+                    // Output Length
+                    HStack {
+                        Text(lengthOutput.formatted())
+                        Spacer()
+                        Text(lengthOutputType) // Display unit next to output
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 
 //                Section(header: Text("Section 2")) {
