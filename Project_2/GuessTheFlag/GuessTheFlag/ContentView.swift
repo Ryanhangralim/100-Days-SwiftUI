@@ -14,6 +14,8 @@ struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
     @State private var score: Int = 0
+    @State private var questionsLeft: Int = 8
+    @State private var gameOver: Bool = false
     
     var body: some View {
         ZStack{
@@ -30,7 +32,8 @@ struct ContentView: View {
                 Text("Guess the Flag")
                     .font(.largeTitle.weight(.bold))
                     .foregroundStyle(.white)
-                
+                Text("Questions Left: \(questionsLeft)")
+                    .foregroundStyle(.white)
                 
                 VStack(spacing: 15){
                     VStack{
@@ -64,10 +67,6 @@ struct ContentView: View {
                 Text("Score: \(score)")
                     .foregroundStyle(.white)
                     .font(.title.bold())
-                Button("Reset"){
-                    score = 0
-                }
-                .foregroundStyle(.white)
             }
             .padding()
         }
@@ -76,6 +75,12 @@ struct ContentView: View {
         } message: {
             Text("Your score is \(score)")
         }
+        .alert("Game Over", isPresented: $gameOver)
+        {
+            Button("Reset", action: resetGame)
+        } message: {
+            Text("Your final score is \(score)")
+        }
     }
     
     func flagTapped(_ number: Int){
@@ -83,15 +88,32 @@ struct ContentView: View {
             scoreTitle = "Correct"
             score += 1
         } else {
-            scoreTitle = "Wrong"
+            scoreTitle = "Wrong! That's the the flag of \(countries[number])"
         }
         
         showingScore = true
     }
     
     func askQuestion() {
+        isGameOver()
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+    }
+    
+    func isGameOver() {
+        questionsLeft -= 1
+        if(questionsLeft == 0)
+        {
+            gameOver = true
+        }
+    }
+    
+    func resetGame() {
+        score = 0
+        questionsLeft = 8
+        showingScore = false
+        gameOver = false
+        askQuestion()
     }
 }
 
