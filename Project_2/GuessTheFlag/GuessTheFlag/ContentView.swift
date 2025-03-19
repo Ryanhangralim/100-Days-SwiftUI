@@ -57,7 +57,7 @@ struct ContentView: View {
                     }
                     
                     ForEach(0..<3) { number in
-                        FlagImage(number: number, countries: countries)
+//                        FlagImage(number: number, countries: countries)
                         Button{
                             // flag was tapped
                             flagTapped(number)
