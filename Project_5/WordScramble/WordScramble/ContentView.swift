@@ -22,7 +22,10 @@ struct ContentView: View {
                 Section {
                     TextField("Enter your word", text: $newWord)
                         .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                 }
+                
+                Text("Score : \(usedWords.count)")
                 
                 Section {
                     ForEach(usedWords, id: \.self){ word in
@@ -34,6 +37,9 @@ struct ContentView: View {
                 }
             }
             .navigationTitle(rootWord)
+            .toolbar {
+                Button("New Word", action: startGame)
+            }
             .onSubmit(addNewWord)
             .onAppear(perform: startGame)
             .alert(errorTitle, isPresented: $showingError){
@@ -47,7 +53,10 @@ struct ContentView: View {
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
-        guard answer.count > 0 else { return }
+        guard answer.count > 3 else {
+            wordError(title: "Word too short", message: "Word shouldn't be less than 4 letters long!")
+            return
+        }
         
         guard isOriginal(word: answer) else {
             wordError(title: "Word used already", message: "Be more original!")
@@ -71,6 +80,9 @@ struct ContentView: View {
     }
     
     func startGame() {
+        usedWords.removeAll()
+        newWord = ""
+        
         if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt"){
             if let startWords = try? String(contentsOf: startWordsURL, encoding: .utf8){
                 let allWords = startWords.split(separator: "\n")
