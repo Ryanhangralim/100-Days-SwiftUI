@@ -28,6 +28,10 @@ struct ContentView: View {
     @State private var questionsLeft: Int = 8
     @State private var gameOver: Bool = false
     
+    // Animation variable
+    @State private var selectedFlag: Int? = nil
+    @State private var animationAmount = 0.0
+    
     var body: some View {
         ZStack{
             //            LinearGradient(colors: [.blue, .black], startPoint: .top, endPoint: .bottom)
@@ -61,12 +65,18 @@ struct ContentView: View {
                         Button{
                             // flag was tapped
                             flagTapped(number)
-                        } label: {
+                        }
+                        label: {
                             FlagImage(number: number, countries: countries)
 //                            Image(countries[number])
 //                                .clipShape(.capsule)
 //                                .shadow(radius: 5)
                         }
+                        .rotation3DEffect(
+                            .degrees(number == selectedFlag ? animationAmount : 0), axis: (x: 0, y: 1, z: 0))
+                        .opacity(selectedFlag == nil || selectedFlag == number ? 1 : 0.25) // Fade others
+                        .scaleEffect(selectedFlag == nil || selectedFlag == number ? 1 : 0.9) // Slightly shrink others
+                        .animation(.easeInOut(duration: 0.6), value: animationAmount)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -97,20 +107,29 @@ struct ContentView: View {
     }
     
     func flagTapped(_ number: Int){
+        withAnimation {
+            selectedFlag = number
+            animationAmount += 360
+        }
+        
         if number == correctAnswer {
             scoreTitle = "Correct"
             score += 1
         } else {
-            scoreTitle = "Wrong! That's the the flag of \(countries[number])"
+            scoreTitle = "Wrong! That's the flag of \(countries[number])"
         }
         
-        showingScore = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            showingScore = true
+        }
     }
     
     func askQuestion() {
         isGameOver()
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        selectedFlag = nil // Reset selection
+        animationAmount = 0
     }
     
     func isGameOver() {
