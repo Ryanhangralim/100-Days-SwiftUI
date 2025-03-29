@@ -56,14 +56,17 @@ class Habits{
 struct ContentView: View {
     @State private var habits = Habits()
     
+    // Show sheets
+    @State private var showingAddActivity = false
+    
     var body: some View {
         NavigationStack {
             Text("Hello World")
             .toolbar {
                 // Toolbar to add new activity
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: Text("Add activity view")) {
-                        Label("Add Activity", systemImage: "plus")
+                    Button("Add Activity", systemImage: "plus"){
+                        showingAddActivity = true
                     }
                 }
                 
@@ -75,6 +78,9 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Habit Tracker")
+            .sheet(isPresented: $showingAddActivity){
+                AddActivity(habits: habits)
+            }
         }
     }
 }

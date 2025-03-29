@@ -45,7 +45,7 @@ struct AddView: View {
                     Button("Cancel"){
                         dismiss()
                     }
-                                    }
+                }
             }
             .navigationBarBackButtonHidden()
         }
