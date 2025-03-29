@@ -61,7 +61,29 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            Text("Hello World")
+            ScrollView {
+                LazyVStack(spacing: 10) {
+                    ForEach(habits.items) { habit in
+                        NavigationLink(destination: DetailView(habit:habit)){
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(habit.type)
+                                        .font(.headline)
+                                    Text(habit.date, style: .date)
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                            }
+                            .padding()
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(10)
+                            .shadow(color: Color.black.opacity(0.1), radius: 4)
+                        }
+                    }
+                }
+                .padding()
+            }
             .toolbar {
                 // Toolbar to add new activity
                 ToolbarItem(placement: .topBarTrailing) {
