@@ -12,19 +12,29 @@ struct AddActivity: View {
     
     var habits: Habits
     
-    @State private var type = ""
+    @State private var selectedHabitId: UUID?
     @State private var description = ""
     @State private var date = Date()
     @State private var duration = 5
+    
+    // Computed property to check if form is valid
+    private var isFormValid: Bool {
+        selectedHabitId != nil && !description.isEmpty
+    }
+    
+    // Find the selected habit based on its ID
+    private var selectedHabit: HabitType? {
+        habits.types.first { $0.id == selectedHabitId }
+    }
     
     var body: some View {
         NavigationStack {
             Form {
                 // Habit Type Picker
                 Section("Habit Type") {
-                    Picker("Habit type", selection: $type) {
+                    Picker("Habit type", selection: $selectedHabitId) {
                         ForEach(habits.types) { habit in
-                            Text(habit.name).tag(habit.name)
+                            Text(habit.name).tag(habit.id)
                         }
                     }
                 }
@@ -51,6 +61,7 @@ struct AddActivity: View {
                         saveActivity()
                         dismiss()
                     }
+                    .disabled(!isFormValid) // Disable if form is not valid
                 }
                 
                 ToolbarItem(placement: .topBarLeading) {
@@ -64,8 +75,10 @@ struct AddActivity: View {
     
     // Save the new activity into the habits list
     private func saveActivity() {
+        guard let selectedHabit = selectedHabit else { return }
+        
         let newActivity = HabitItem(
-            type: type,
+            type: selectedHabit.name,
             description: description,
             date: date,
             duration: duration
@@ -73,6 +86,7 @@ struct AddActivity: View {
         habits.items.append(newActivity)
     }
 }
+
 
 #Preview {
     AddActivity(habits: Habits())
