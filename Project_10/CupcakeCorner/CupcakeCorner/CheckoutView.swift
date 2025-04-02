@@ -12,6 +12,7 @@ struct CheckoutView: View {
     
     @State private var confirmationMessage = ""
     @State private var showingConfirmation = false
+    @State private var orderFail = false
     
     var body: some View {
         ScrollView {
@@ -44,6 +45,11 @@ struct CheckoutView: View {
         } message: {
             Text(confirmationMessage)
         }
+        .alert("Checkout Failed", isPresented: $orderFail) {
+            Button("Ok"){}
+        } message: {
+            Text("There seem to be a problem during checkout. Try again.")
+        }
     }
     
     func placeOrder() async {
@@ -65,7 +71,8 @@ struct CheckoutView: View {
             confirmationMessage = "Your order for \(decodedOrder.quantity) \(Order.types[decodedOrder.type].lowercased()) cupcakes is on its way!"
             showingConfirmation = true
         } catch {
-            print("Check out failed: \(error.localizedDescription)")
+            // If checkout fail
+            orderFail = true
         }
     }
 }
