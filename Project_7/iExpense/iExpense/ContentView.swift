@@ -18,9 +18,24 @@ struct ContentView: View {
     
     @State private var showingAddExpense = false
     
+    // Filter
+    let filters = ["All", "Personal", "Business"]
+    @State private var selectedFilter = "All"
+    
     var body: some View {
         NavigationStack {
-            ExpenseView(sortOrder: sortOrder)
+            VStack {
+                // Filters
+                Picker("Filter", selection: $selectedFilter) {
+                    ForEach(filters, id: \.self) { filter in
+                        Text(filter)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding()
+                
+                ExpenseView(typeFilter: selectedFilter, sortOrder: sortOrder)
+            }
             .navigationTitle("iExpense")
             .toolbar{
                 NavigationLink{
