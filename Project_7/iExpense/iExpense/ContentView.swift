@@ -11,49 +11,44 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.modelContext) var modelContext
-    @Query var expenses: [ExpenseItem]
+    @State private var sortOrder = [
+        SortDescriptor(\ExpenseItem.name),
+        SortDescriptor(\ExpenseItem.amount)
+    ]
     
     @State private var showingAddExpense = false
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(expenses) { item in
-                    HStack{
-                        VStack(alignment: .leading){
-                            Text(item.name)
-                                .font(.headline)
-                            Text(item.type)
-                        }
-                        
-                        Spacer()
-                        
-                        Text(item.amount,format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                            .foregroundStyle(item.amount > 100000 ? .red : item.amount > 50000 ? .orange : .blue)
-                    }
-                }
-                .onDelete(perform: removeItems)
-            }
+            ExpenseView(sortOrder: sortOrder)
             .navigationTitle("iExpense")
             .toolbar{
                 NavigationLink{
                     AddView()
                 } label: {
-                    Button("Add Expense", systemImage: "plus"){
-            
-                    }
+                    Button("Add Expense", systemImage: "plus"){ }
                 }
                 
+                Menu("Sort", systemImage: "arrow.up.arrow.down"){
+                    Picker("Sort", selection: $sortOrder){
+                        Text("Sort by Name")
+                            .tag([
+                                SortDescriptor(\ExpenseItem.name),
+                                SortDescriptor(\ExpenseItem.amount)
+                            ])
+                        
+                        Text("Sort by Amount")
+                            .tag([
+                                SortDescriptor(\ExpenseItem.amount),
+                                SortDescriptor(\ExpenseItem.name)
+                            ])
+                    }
+                }
             }
         }
     }
     
-    func removeItems(at offsets: IndexSet){
-        for offset in offsets {
-            let item = expenses[offset]
-            modelContext.delete(item)
-        }
-    }
+    
 }
 
 #Preview {
