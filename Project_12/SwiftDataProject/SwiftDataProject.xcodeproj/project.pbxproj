@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		6EF8F32E2D9E1B6600594D7C /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF8F32D2D9E1B6600594D7C /* Job.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		6EF8F2F22D9E0B0000594D7C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -31,7 +27,6 @@
 		6EF8F2E12D9E0AFF00594D7C /* SwiftDataProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDataProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EF8F2F12D9E0B0000594D7C /* SwiftDataProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftDataProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EF8F2FB2D9E0B0000594D7C /* SwiftDataProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftDataProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6EF8F32D2D9E1B6600594D7C /* Job.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Job.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -80,7 +75,6 @@
 		6EF8F2D82D9E0AFF00594D7C = {
 			isa = PBXGroup;
 			children = (
-				6EF8F32D2D9E1B6600594D7C /* Job.swift */,
 				6EF8F2E32D9E0AFF00594D7C /* SwiftDataProject */,
 				6EF8F2F42D9E0B0000594D7C /* SwiftDataProjectTests */,
 				6EF8F2FE2D9E0B0000594D7C /* SwiftDataProjectUITests */,
@@ -242,7 +236,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EF8F32E2D9E1B6600594D7C /* Job.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

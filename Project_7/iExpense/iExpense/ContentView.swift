@@ -5,47 +5,20 @@
 //  Created by Ryan Hangralim on 23/03/25.
 //
 
+import SwiftData
 import SwiftUI
-
-struct ExpenseItem: Identifiable, Codable {
-    var id = UUID()
-    let name: String
-    let type: String
-    let amount: Double
-}
-
-@Observable
-class Expenses{
-    var items = [ExpenseItem](){
-        didSet {
-            if let encoded = try? JSONEncoder().encode(items) {
-                UserDefaults.standard.set(encoded, forKey: "Items")
-            }
-        }
-    }
-    
-    init() {
-        if let savedItems = UserDefaults.standard.data(forKey: "Items") {
-            if let decodedItems = try? JSONDecoder().decode([ExpenseItem].self, from: savedItems) {
-                items = decodedItems
-                return
-            }
-        }
-        
-        items = []
-    }
-}
 
 
 struct ContentView: View {
-    @State private var expenses = Expenses()
+    @Environment(\.modelContext) var modelContext
+    @Query var expenses: [ExpenseItem]
     
     @State private var showingAddExpense = false
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(expenses.items, id: \.id) { item in
+                ForEach(expenses) { item in
                     HStack{
                         VStack(alignment: .leading){
                             Text(item.name)
@@ -64,9 +37,7 @@ struct ContentView: View {
             .navigationTitle("iExpense")
             .toolbar{
                 NavigationLink{
-                    (AddView(expenses: expenses))
-//                Button("Add Expense", systemImage: "plus") {
-//                    showingAddExpense = true
+                    AddView()
                 } label: {
                     Button("Add Expense", systemImage: "plus"){
             
@@ -74,14 +45,14 @@ struct ContentView: View {
                 }
                 
             }
-//            .sheet(isPresented: $showingAddExpense){
-//                AddView(expenses: expenses)
-//            }
         }
     }
     
     func removeItems(at offsets: IndexSet){
-        expenses.items.remove(atOffsets: offsets)
+        for offset in offsets {
+            let item = expenses[offset]
+            modelContext.delete(item)
+        }
     }
 }
 
