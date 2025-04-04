@@ -5,12 +5,13 @@
 //  Created by Ryan Hangralim on 04/04/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    // Variable to store friends data
-    @State private var users = [User]()
-    
+    @Environment(\.modelContext) var modelContext
+    @Query var users: [User]
+     
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -65,18 +66,22 @@ struct ContentView: View {
         guard let url = URL(string: "https://www.hackingwithswift.com/samples/friendface.json") else {
             return
         }
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
 
         // Fetch data
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            
             // decode data if valid
             do {
                 let decodedUsers = try decoder.decode([User].self, from: data)
-                users = decodedUsers
+                
+                // Store data
+                for user in decodedUsers {
+                    modelContext.insert(user)
+                }
+        
             } catch {
                 print("Decoding failed: \(error)")
             }

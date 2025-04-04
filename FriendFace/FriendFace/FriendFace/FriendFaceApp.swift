@@ -5,6 +5,7 @@
 //  Created by Ryan Hangralim on 04/04/25.
 //
 
+import SwiftData
 import SwiftUI
 
 @main
@@ -13,6 +14,6 @@ struct FriendFaceApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [User.self, Friend.self])
+        .modelContainer(for: User.self)
     }
 }
