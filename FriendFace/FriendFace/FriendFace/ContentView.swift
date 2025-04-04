@@ -13,7 +13,7 @@ struct Friend : Codable {
     var name: String
 }
 
-struct User: Codable {
+struct User: Codable, Identifiable {
     var id: String
     var isActive: Bool
     var name: String
@@ -33,13 +33,44 @@ struct ContentView: View {
     @State private var users = [User]()
     
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            ScrollView {
+                LazyVStack(spacing: 16) {
+                    ForEach(users) { user in
+                        NavigationLink(destination: Text("\(user.name)")/*UserDetailView(user: user)*/) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(user.name)
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+                                    
+                                    Text(user.company)
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+
+                                Spacer()
+
+                                HStack(spacing: 4) {
+                                    Circle()
+                                        .fill(user.isActive ? Color.green : Color.red)
+                                        .frame(width: 10, height: 10)
+                                    Text(user.isActive ? "Active" : "Inactive")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            .padding()
+                            .background(.ultraThinMaterial)
+                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+                        }
+                    }
+                }
+                .padding()
+            }
+            .navigationTitle("FriendFace")
         }
-        .padding()
         .task {
             if(users.isEmpty){
                 print("Load data")
