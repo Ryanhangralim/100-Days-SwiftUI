@@ -37,7 +37,7 @@ struct ContentView: View {
             ScrollView {
                 LazyVStack(spacing: 16) {
                     ForEach(users) { user in
-                        NavigationLink(destination: Text("\(user.name)")/*UserDetailView(user: user)*/) {
+                        NavigationLink(destination: UserDetailView(user: user)) {
                             HStack {
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(user.name)
