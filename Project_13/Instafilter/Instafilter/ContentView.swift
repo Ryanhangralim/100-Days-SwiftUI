@@ -14,6 +14,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var processedImage: Image?
     @State private var filterIntensity = 0.5
+    @State private var filterRadius = 0.5
     
     @State private var selectedItem: PhotosPickerItem?
     @State private var showingFilters = false
@@ -48,11 +49,20 @@ struct ContentView: View {
                     Text("Intensity")
                     Slider(value: $filterIntensity)
                         .onChange(of: filterIntensity, applyProcessing)
+                        .disabled(processedImage == nil)
+                }
+                
+                HStack {
+                    Text("Radius")
+                    Slider(value: $filterRadius)
+                        .onChange(of: filterRadius, applyProcessing)
+                        .disabled(processedImage == nil)
                 }
                 
                 HStack{
                     // Change filter
                     Button("Change Filter", action: changeFilter)
+                        .disabled(processedImage == nil)
                     
                     Spacer()
                     
@@ -98,7 +108,7 @@ struct ContentView: View {
         let inputKeys = currentFilter.inputKeys
         
         if inputKeys.contains(kCIInputIntensityKey) { currentFilter.setValue(filterIntensity, forKey: kCIInputIntensityKey) }
-        if inputKeys.contains(kCIInputRadiusKey) { currentFilter.setValue(filterIntensity * 200, forKey: kCIInputRadiusKey) }
+        if inputKeys.contains(kCIInputRadiusKey) { currentFilter.setValue(filterRadius * 200, forKey: kCIInputRadiusKey) }
         if inputKeys.contains(kCIInputScaleKey) { currentFilter.setValue(filterIntensity * 10, forKey: kCIInputScaleKey) }
         
         guard let outputImage = currentFilter.outputImage else { return }
@@ -116,7 +126,7 @@ struct ContentView: View {
         
         filterCount += 1
         
-        if filterCount >= 3 {
+        if filterCount >= 20 {
             requestReview()
         }
     }
