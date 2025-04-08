@@ -17,6 +17,7 @@ extension ContentView{
         private(set) var locations: [Location]
         var selectedPlace: Location?
         var isUnlocked = false
+        var authenticationFailed = false
         
         // Load data if exist
         let savePath = URL.documentsDirectory.appending(path: "SavedPlaces")
@@ -66,7 +67,7 @@ extension ContentView{
                     if success {
                         self.isUnlocked = true
                     } else {
-                        // error
+                        self.authenticationFailed = true
                     }
                 }
             } else {
