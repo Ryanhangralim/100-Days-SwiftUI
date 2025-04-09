@@ -25,7 +25,10 @@ struct ContentView: View {
                 ZStack {
                     Map(initialPosition: startPosition) {
                         ForEach(viewModel.locations) { location in
-                            Annotation(location.name, coordinate: location.coordinate) {
+                            Annotation(
+                                location.name,
+                                coordinate: location.coordinate
+                            ) {
                                 Image(systemName: "star.circle")
                                     .resizable()
                                     .foregroundStyle(.red)
@@ -39,7 +42,10 @@ struct ContentView: View {
                         }
                     }
                     .onTapGesture { position in
-                        if let coordinate = proxy.convert(position, from: .local) {
+                        if let coordinate = proxy.convert(
+                            position,
+                            from: .local
+                        ) {
                             viewModel.addLocation(at: coordinate)
                         }
                     }
@@ -77,7 +83,12 @@ struct ContentView: View {
                 .background(.blue)
                 .foregroundStyle(.white)
                 .clipShape(.capsule)
-                .alert("Authentication Failed", isPresented: $viewModel.authenticationFailed) { }
+                .alert(
+                    "Authentication Failed",
+                    isPresented: $viewModel.authenticationFailed
+                ) {
+ 
+                }
         }
     }
 
