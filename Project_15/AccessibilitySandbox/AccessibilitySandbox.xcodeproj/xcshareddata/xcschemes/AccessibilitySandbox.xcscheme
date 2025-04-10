@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6EF8F3FF2DA38E2000594D7C"
-               BuildableName = "BucketList.app"
-               BlueprintName = "BucketList"
-               ReferencedContainer = "container:BucketList.xcodeproj">
+               BlueprintIdentifier = "6EF8F44E2DA6351300594D7C"
+               BuildableName = "AccessibilitySandbox.app"
+               BlueprintName = "AccessibilitySandbox"
+               ReferencedContainer = "container:AccessibilitySandbox.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,10 +44,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6EF8F3FF2DA38E2000594D7C"
-            BuildableName = "BucketList.app"
-            BlueprintName = "BucketList"
-            ReferencedContainer = "container:BucketList.xcodeproj">
+            BlueprintIdentifier = "6EF8F44E2DA6351300594D7C"
+            BuildableName = "AccessibilitySandbox.app"
+            BlueprintName = "AccessibilitySandbox"
+            ReferencedContainer = "container:AccessibilitySandbox.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -61,10 +61,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6EF8F3FF2DA38E2000594D7C"
-            BuildableName = "BucketList.app"
-            BlueprintName = "BucketList"
-            ReferencedContainer = "container:BucketList.xcodeproj">
+            BlueprintIdentifier = "6EF8F44E2DA6351300594D7C"
+            BuildableName = "AccessibilitySandbox.app"
+            BlueprintName = "AccessibilitySandbox"
+            ReferencedContainer = "container:AccessibilitySandbox.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
