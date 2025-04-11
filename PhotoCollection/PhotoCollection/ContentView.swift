@@ -47,8 +47,8 @@ struct ContentView: View {
                 List(namedPhotos) { photo in
                     NavigationLink(destination: DetailView(photo: photo)) {
                         HStack {
-                            if let image = loadImage(from: photo.imageFileName) {
-                                Image(uiImage: image)
+                            if let data = photo.imageData, let uiImage = UIImage(data: data) {
+                                Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 50, height: 50)
@@ -104,48 +104,26 @@ struct ContentView: View {
             return
         }
         
-        do {
-            let filename = try saveImage(image)
-            DispatchQueue.main.async {
-                let photo = NamedPhoto(name: newName, imageFileName: filename)
-                modelContext.insert(photo)
-                
-                do {
-                    try modelContext.save()
-                    print("✅ Successfully inserted \(photo.name)")
-                } catch {
-                    print("❌ Save failed: \(error)")
-                }
-            }
+        if let data = image.jpegData(compressionQuality: 0.8){
+            let photo = NamedPhoto(name: newName, imageData: data)
+            modelContext.insert(photo)
             
-            // clear tmp state
-            uploadedImage = nil
-            newName = ""
-            tempUIImage = nil
-        } catch {
-            print("Error saving image: \(error)")
-        }
-    }
-    
-    func saveImage(_ image: UIImage) throws -> String {
-        let filename = UUID().uuidString + ".jpg"
-        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(filename)
-
-        if let data = image.jpegData(compressionQuality: 0.8) {
-            try data.write(to: url, options: [.atomicWrite, .completeFileProtection])
-            print("✅ Saved image at \(url.path)")
-            return filename
+            do {
+                try modelContext.save()
+                print("✅ Successfully inserted \(photo.name)")
+            } catch {
+                print("❌ Save failed: \(error)")
+            }
         } else {
-            throw NSError(domain: "ImageConversionError", code: 0)
+            print("Error saving image")
         }
+        
+        // clear tmp state
+        uploadedImage = nil
+        newName = ""
+        tempUIImage = nil
     }
-    
-    func loadImage(from filename: String) -> UIImage? {
-        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(
-            filename
-        )
-        return UIImage(contentsOfFile: url.path)
-    }
+
 }
 
 #Preview {

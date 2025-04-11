@@ -12,13 +12,15 @@ import SwiftData
 class NamedPhoto {
     var id: UUID
     var name: String
-    var imageFileName: String
     var createdAt: Date
     
-    init(id: UUID = UUID(), name: String, imageFileName: String, createdAt: Date = .now) {
+    @Attribute(.externalStorage)
+    var imageData: Data?
+    
+    init(id: UUID = UUID(), name: String, createdAt: Date = .now, imageData: Data?) {
         self.id = id
         self.name = name
-        self.imageFileName = imageFileName
         self.createdAt = createdAt
+        self.imageData = imageData
     }
 }

@@ -12,25 +12,23 @@ struct DetailView: View {
 
     var body: some View {
         VStack {
-            if let image = loadImage(from: photo.imageFileName) {
-                Image(uiImage: image)
+            if let data = photo.imageData,
+               let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
                     .padding()
             } else {
                 Text("Image not found")
+                    .foregroundColor(.secondary)
             }
+
             Text(photo.name)
                 .font(.title)
                 .padding()
         }
         .navigationTitle(photo.name)
         .navigationBarTitleDisplayMode(.inline)
-    }
-
-    func loadImage(from filename: String) -> UIImage? {
-        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(filename)
-        return UIImage(contentsOfFile: url.path)
     }
 }
 
