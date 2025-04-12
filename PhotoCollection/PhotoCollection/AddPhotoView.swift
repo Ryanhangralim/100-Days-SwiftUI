@@ -34,6 +34,7 @@ struct AddPhotoView: View {
                         .cornerRadius(12)
                         .shadow(radius: 4)
                         .padding(.top, 8)
+                        .padding(.bottom, 8)
                 }
             }
             
