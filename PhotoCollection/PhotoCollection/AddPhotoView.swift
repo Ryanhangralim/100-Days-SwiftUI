@@ -85,33 +85,45 @@ struct AddPhotoView: View {
             print("❌ No temp image to save")
             return
         }
-
-        if let data = image.jpegData(compressionQuality: 0.8) {
-            let coordinate = locationFetcher.lastKnownLocation
-            let photo = NamedPhoto(name: newName, imageData: data, latitude: coordinate?.latitude, longitude: coordinate?.longitude)
-            modelContext.insert(photo)
-
-            do {
-                try modelContext.save()
-                print("✅ Successfully inserted \(photo.name)")
-                // Safely unwrap the coordinate to print the latitude and longitude
-                if let coordinate = coordinate {
-                    print("Coordinate: Lat \(coordinate.latitude) Lon \(coordinate.longitude)")
-                } else {
-                    print("❌ Failed to get coordinate.")
+        
+        // Ensure location is fetched before proceeding
+        fetchLocation { location in
+            if let data = image.jpegData(compressionQuality: 0.8) {
+                let photo = NamedPhoto(name: newName, imageData: data, latitude: location?.latitude, longitude: location?.longitude)
+                modelContext.insert(photo)
+                
+                do {
+                    try modelContext.save()
+                    print("✅ Successfully inserted \(photo.name)")
+                    // Safely unwrap the coordinate to print the latitude and longitude
+                    if let coordinate = location {
+                        print("Coordinate: Lat \(coordinate.latitude) Lon \(coordinate.longitude)")
+                    } else {
+                        print("❌ Failed to get coordinate.")
+                    }
+                    dismiss()
+                } catch {
+                    print("❌ Save failed: \(error)")
                 }
-                dismiss()
-            } catch {
-                print("❌ Save failed: \(error)")
+            } else {
+                print("❌ Error converting image to JPEG")
             }
-        } else {
-            print("❌ Error converting image to JPEG")
+            
+            // Clear temporary state
+            uploadedImage = nil
+            newName = ""
+            tempUIImage = nil
         }
-
-        // Clear temporary state
-        uploadedImage = nil
-        newName = ""
-        tempUIImage = nil
+    }
+    
+    func fetchLocation(completion: @escaping (CLLocationCoordinate2D?) -> Void) {
+        // Start the location fetch
+        locationFetcher.start()
+        
+        // Delay to allow location to update
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { // Adjust delay as needed
+            completion(locationFetcher.lastKnownLocation)
+        }
     }
 }
 
