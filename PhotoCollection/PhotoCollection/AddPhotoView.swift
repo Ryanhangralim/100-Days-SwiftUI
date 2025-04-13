@@ -6,6 +6,7 @@
 //
 
 import PhotosUI
+import MapKit
 import SwiftData
 import SwiftUI
 
@@ -17,6 +18,8 @@ struct AddPhotoView: View {
     @State private var uploadedImage: Image?
     @State private var newName = ""
     @State private var tempUIImage: UIImage?
+
+    let locationFetcher = LocationFetcher()
 
     var body: some View {
         Form {
@@ -62,6 +65,7 @@ struct AddPhotoView: View {
     }
 
     func handleSelectedPhoto() async {
+        locationFetcher.start()
         guard let pickerItem else { return }
         
         do {
@@ -83,12 +87,19 @@ struct AddPhotoView: View {
         }
 
         if let data = image.jpegData(compressionQuality: 0.8) {
-            let photo = NamedPhoto(name: newName, imageData: data)
+            let coordinate = locationFetcher.lastKnownLocation
+            let photo = NamedPhoto(name: newName, imageData: data, latitude: coordinate?.latitude, longitude: coordinate?.longitude)
             modelContext.insert(photo)
 
             do {
                 try modelContext.save()
                 print("✅ Successfully inserted \(photo.name)")
+                // Safely unwrap the coordinate to print the latitude and longitude
+                if let coordinate = coordinate {
+                    print("Coordinate: Lat \(coordinate.latitude) Lon \(coordinate.longitude)")
+                } else {
+                    print("❌ Failed to get coordinate.")
+                }
                 dismiss()
             } catch {
                 print("❌ Save failed: \(error)")

@@ -14,16 +14,18 @@ class NamedPhoto {
     var id: UUID
     var name: String
     var createdAt: Date
-    var location: CLLocationCoordinate2D?
-    
+    var latitude: Double?
+    var longitude: Double?
+
     @Attribute(.externalStorage)
     var imageData: Data?
     
-    init(id: UUID = UUID(), name: String, createdAt: Date = .now, location = CLLocationCoordinate2D? = nil, imageData: Data?) {
+    init(id: UUID = UUID(), name: String, createdAt: Date = .now, imageData: Data?, latitude: Double?, longitude: Double?) {
         self.id = id
         self.name = name
         self.createdAt = createdAt
-        self.location = location
         self.imageData = imageData
+        self.latitude = latitude
+        self.longitude = longitude
     }
 }
